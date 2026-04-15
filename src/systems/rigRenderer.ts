@@ -42,6 +42,13 @@ export interface IRenderedElement {
 				origin: number[]
 				rescale?: boolean
 		  }
+		| {
+				x: number
+				y: number
+				z: number
+				origin: number[]
+				rescale?: boolean
+		  }
 		| number[]
 	faces?: Record<string, IRenderedFace>
 	light_emission?: number
@@ -207,11 +214,33 @@ function renderCube(cube: Cube, rig: IRenderedRig, model: IRenderedModel) {
 
 	if (cube.shade === false) element.shade = false
 
+	// this is a god blessed quick patch you know?
+	// so
+
+	// if (!(cube.rotation.allEqual(0) && cube.origin.allEqual(0))) {
+	// 	const axis = cube.rotationAxis() || 'y'
+	// 	element.rotation = {
+	// 		angle: cube.rotation[getAxisNumber(axis)],
+	// 		axis,
+	// 		origin: cube.origin,
+	// 	}
+	// 	if (cube.rescale) {
+	// 		element.rotation.rescale = true
+	// 	}
+	// } else if (cube.rescale) {
+	// 	element.rotation = {
+	// 		angle: 0,
+	// 		axis: cube.rotation_axis || 'y',
+	// 		origin: cube.origin,
+	// 		rescale: true,
+	// 	}
+	// }
+
 	if (!(cube.rotation.allEqual(0) && cube.origin.allEqual(0))) {
-		const axis = cube.rotationAxis() || 'y'
 		element.rotation = {
-			angle: cube.rotation[getAxisNumber(axis)],
-			axis,
+			x: cube.rotation[0],
+			y: cube.rotation[1],
+			z: cube.rotation[2],
 			origin: cube.origin,
 		}
 		if (cube.rescale) {
